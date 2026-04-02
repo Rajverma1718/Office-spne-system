@@ -1,0 +1,142 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %}Recent Swipe{% endblock title %}
+
+{% block head %}
+<style>
+    .content {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .main-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .main-content h1 {
+        font-size: 24px;
+        color: #333;
+    }
+
+    .back-btn {
+        padding: 6px 12px;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background-color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .subheading {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #666;
+    }
+
+    .card {
+        background-color: #fff9ef;
+        border-left: 6px solid orange;
+        padding: 12px 15px;
+        margin: 15px 0;
+        display: flex;
+        border-radius: 5px;
+    }
+
+    .card-icon {
+        background-color: orange;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        border-radius: 4px;
+        margin-right: 12px;
+    }
+
+    .card-content {
+        flex-grow: 1;
+    }
+
+    .card-content p {
+        margin: 3px 0;
+    }
+
+    .date-line {
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .pagination button {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .pagination button.active {
+        background-color: #0c589c;
+        color: white;
+    }
+</style>
+{% endblock head %}
+
+{% block body %}
+<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+    <div class="content">
+        <div class="main-content">
+            <h1>Swipe</h1>
+            <a href="{% url 'swipe_home' %}" class="back-btn">Back</a>
+        </div>
+        <p class="subheading">Recent Applications</p>
+
+        {% if applications %}
+            {% for app in applications %}
+            <div class="card">
+                <div class="card-icon">S</div>
+                <div class="card-content">
+                    <p>{{ app.get_category_display }}</p>
+                    <p class="date-line">{{ app.request_date|date:"d-M-y D" }}</p>
+                    {% if app.in_time and app.out_time %}
+                        <p>In {{ app.in_time|time:"h:i A" }} &nbsp;&nbsp;&nbsp; Out {{ app.out_time|time:"h:i A" }}</p>
+                    {% elif app.in_time %}
+                        <p>In {{ app.in_time|time:"h:i A" }}</p>
+                    {% elif app.out_time %}
+                        <p>Out {{ app.out_time|time:"h:i A" }}</p>
+                    {% endif %}
+                    <p>{{ app.reason }}</p>
+                    <span style="color: rgba(255, 0, 0, 0.753); font-weight: lighter;"><p><strong>{{ app.status|title }}</strong></p></span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No swipe applications found.</p>
+        {% endif %}
+
+        <!-- Pagination (Optional)
+        <div class="pagination">
+            <button>&laquo;</button>
+            <button>&lsaquo;</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>...</button>
+            <button>&rsaquo;</button>
+            <button>&raquo;</button>
+        </div> -->
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,145 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %} Attendance {% endblock title %}
+
+{% block head %}
+<style>
+    .main-content {
+        padding: 20px;
+    }
+
+    .main-content a{
+        color: black;
+        text-decoration: none;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-left: 8px solid #28a9e0;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        background-color: #f8f8f8;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .card-disabled{
+        opacity:0.6;
+        cursor:not-allowed;
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+        background-color: #28a9e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        border-radius: 4px;
+        margin-right: 12px;
+        font-size: 20px;
+    }
+
+    .card span {
+        font-size: 18px;
+    }
+
+    .msg{
+        color:red;
+        margin-left:5px;
+        margin-bottom:10px;
+    }
+
+</style>
+{% endblock head %}
+
+{% block body %}
+
+<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+    <div class="main-content">
+
+        <h2>Attendance</h2>
+
+        <!-- CLOCK IN -->
+
+        {% if clock_in_done %}
+            <div class="card card-disabled">
+                <div class="card-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <span>Clock In</span>
+            </div>
+
+            {% if not clock_out_done %}
+                <p class="msg">Do Clock Out first to do Clock In again</p>
+            {% endif %}
+
+        {% else %}
+
+            <a href="{% url 'clock_in_attendance' %}">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <span>Clock In</span>
+                </div>
+            </a>
+
+        {% endif %}
+
+
+
+        <!-- CLOCK OUT -->
+
+        {% if clock_out_done %}
+
+            <div class="card card-disabled">
+                <div class="card-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <span>Clocked Out</span>
+            </div>
+
+            <p class="msg">You already clocked out today</p>
+
+        {% else %}
+
+            <a href="{% url 'clock_out_attendance' %}">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <span>Clocked Out</span>
+                </div>
+            </a>
+
+        {% endif %}
+
+
+
+        <!-- LIST VIEW -->
+
+        <a href="{% url 'list_attendance' %}">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <span>List View</span>
+            </div>
+        </a>
+
+
+    </div>
+</div>
+
+{% endblock body %}

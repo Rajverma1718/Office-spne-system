@@ -1,0 +1,257 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %} Add Expense {% endblock title %}
+
+{% block head %}
+<style>
+
+/* ===== PAGE LAYOUT ===== */
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 100px 20px 80px 20px;
+    box-sizing: border-box;
+}
+
+/* ===== CARD ===== */
+.content {
+    width: 100%;
+    max-width: 950px;
+    padding: 50px 60px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== HEADER ===== */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.main-content h1 {
+    font-size: 28px;
+    color: #0b5fa4;
+    margin: 0;
+    font-weight: 600;
+}
+
+.back-btn {
+    padding: 9px 20px;
+    border: 1px solid #0b5fa4;
+    border-radius: 8px;
+    background: white;
+    font-weight: 600;
+    text-decoration: none;
+    color: #0b5fa4;
+    transition: 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #0b5fa4;
+    color: white;
+}
+
+/* ===== FORM ===== */
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+}
+
+.required {
+    color: red;
+    margin-left: 4px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: 0.3s ease;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0b5fa4;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11, 95, 164, 0.1);
+}
+
+/* Expense limit button */
+.exp-limit-btn {
+    display: inline-block;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: #eef3f9;
+    color: #0b5fa4;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.exp-limit-btn:hover {
+    background-color: #dce8f5;
+}
+
+/* ===== BUTTONS ===== */
+.btn-group {
+    display: flex;
+    gap: 18px;
+    margin-top: 30px;
+}
+
+.btn-group button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Save */
+.btn-group button:nth-child(1) {
+    background: #0b5fa4;
+    color: white;
+}
+
+.btn-group button:nth-child(1):hover {
+    background: #094d87;
+}
+
+/* Cancel */
+.btn-group button:nth-child(2) {
+    background: #888;
+    color: white;
+}
+
+.btn-group button:nth-child(2):hover {
+    background: #666;
+}
+
+/* Back to List */
+.btn-group button:nth-child(3) {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-group button:nth-child(3):hover {
+    background: #cfcfcf;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+    .content {
+        padding: 30px 20px;
+    }
+
+    .main-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+}
+
+</style>
+{% endblock head %}
+
+{% block body %}
+
+<div class="container">
+    <div class="content">
+
+        <div class="main-content">
+            <h1>Add Expense</h1>
+            <a href="{% url 'expense_home' %}" class="back-btn">Back</a>
+        </div>
+
+        <label>Claim Type</label>
+        <select>
+            <option>Claimable</option>
+        </select>
+
+        <label>Travel Type <span class="required">*</span></label>
+        <select>
+            <option>Office</option>
+        </select>
+
+        <label>City <span class="required">*</span></label>
+        <select>
+            <option>Mumbai</option>
+        </select>
+
+        <label>Date <span class="required">*</span></label>
+        <input type="date" value="2025-07-20" />
+
+        <label>Expense <span class="required">*</span></label>
+        <select>
+            <option>Select Expense</option>
+        </select>
+
+        <div class="exp-limit-btn">Exp. Limit</div>
+
+        <label>Currency Type</label>
+        <select>
+            <option>INR</option>
+        </select>
+
+        <label>Conversion Rate <span class="required">*</span></label>
+        <input type="text" value="1.00" readonly />
+
+        <label>Rate: Unit</label>
+        <input type="text" placeholder="Unit Value" />
+
+        <label>Amount <span class="required">*</span></label>
+        <input type="number" placeholder="Amount" />
+
+        <label>Final Amount <span class="required">*</span></label>
+        <input type="number" placeholder="Final Amount" />
+
+        <label>Project <span class="required">*</span></label>
+        <select>
+            <option>Select Project</option>
+        </select>
+
+        <label>Attach Document</label>
+        <input type="file" />
+
+        <label>Payment Bill</label>
+        <input type="file" />
+
+        <label>Remarks <span class="required">*</span></label>
+        <textarea rows="3" placeholder="Remarks"></textarea>
+
+        <div class="btn-group">
+            <button type="submit">Save</button>
+            <button type="reset">Cancel</button>
+            <button type="button">Back to List</button>
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}

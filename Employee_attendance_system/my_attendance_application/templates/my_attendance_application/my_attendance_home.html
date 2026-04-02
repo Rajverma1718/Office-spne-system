@@ -1,0 +1,257 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %} Leave Menu {% endblock title %}
+
+{% block head %}
+
+<style>
+
+.main-content {
+display:flex;
+padding:20px;
+justify-self: center;
+
+width:90%;
+}
+
+.attendance-card{
+width:100%;
+background:#efefef;
+padding:40px;
+border-radius:20px;
+box-shadow:0 6px 15px rgba(0,0,0,0.15);
+}
+
+.attendance-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.attendance-header h2{
+color:#1c5d8a;
+font-size:32px;
+}
+
+.back-btn{
+padding:8px 20px;
+border-radius:8px;
+border:1px solid #1c5d8a;
+background:white;
+cursor:pointer;
+}
+
+.notes{
+margin-bottom:15px;
+color:#444;
+}
+
+.dot{
+height:8px;
+width:8px;
+background:#ccc;
+border-radius:50%;
+display:inline-block;
+}
+
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
+
+.filters select{
+padding:6px;
+}
+
+.refresh-btn{
+padding:6px 12px;
+}
+
+.status{
+margin:15px 0;
+}
+
+.red-dot{
+height:10px;
+width:10px;
+background:red;
+display:inline-block;
+border-radius:50%;
+}
+
+.attendance-table{
+width:100%;
+border-collapse:collapse;
+
+}
+
+.attendance-table th{
+    background: rgba(0, 128, 0, 0.386);
+}
+
+.attendance-table th,
+.attendance-table td{
+border: 1px solid black;
+padding:8px;
+text-align:center;
+}
+
+.attendance-table thead{
+background:#f3f3f3;
+}
+
+.attendance-table tfoot{
+background:#a8bed6;
+font-weight:bold;
+}
+
+</style>
+
+{% endblock head %}
+
+{% block body %}
+
+<div class="container" style="margin-top:150px;margin-bottom:100px;">
+<div class="main-content">
+
+<div class="attendance-card">
+
+<div class="attendance-header">
+<h2>My Attendance</h2>
+<a href="{% url 'home' %}"><button class="back-btn">Back</button></a>
+</div>
+
+<form method="get">
+
+<div class="filters">
+
+<select>
+<option>January</option>
+<option>February</option>
+<option>March</option>
+<option>April</option>
+<option>May</option>
+<option>June</option>
+<option>July</option>
+<option>August</option>
+<option>September</option>
+<option>October</option>
+<option>November</option>
+<option>December</option>
+</select>
+
+<select>
+<option>2026</option>
+<option>2025</option>
+<option>2024</option>
+<option>2023</option>
+</select>
+
+<button type="submit" class="submit-btn">Submit</button>
+
+<button type="button" class="refresh-btn" onclick="location.href=location.pathname">
+Refresh
+</button>
+
+</div>
+
+<label>
+<input type="checkbox" name="archive">
+Get Report From Archive Data
+</label>
+
+</form>
+
+<div class="status">
+<span class="red-dot"></span> DP (Day Present)
+<span class="red-dot"></span> DA (Day Absent)
+<span class="red-dot"></span> SR (Swipe Request)
+<span class="red-dot"></span> WO (Weekly Off)
+<span class="red-dot"></span> WFH (Work Form Home)
+<span class="red-dot"></span> PH (Public Holiday)
+</div>
+
+<table class="attendance-table">
+
+<thead>
+<tr>
+<th>Date</th>
+<th>IN Time</th>
+<th>OUT Time</th>
+<th>DA Type</th>
+<th>Portion</th>
+<th>Tot. Hrs.</th>
+<th>Late</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% if records %}
+
+{% for item in records %}
+
+<tr>
+
+<td>{{ item.date|date:"d-M-Y (D)" }}</td>
+
+<td>
+{% if item.clock_in %}
+<span class="red-dot"></span>
+{{ item.clock_in.timestamp|time:"h:i A" }}
+{% else %}
+--
+{% endif %}
+</td>
+
+<td>
+{% if item.clock_out %}
+<span class="red-dot"></span>
+{{ item.clock_out.timestamp|time:"h:i A" }}
+{% else %}
+--
+{% endif %}
+</td>
+
+<td>{{ item.status }}</td>
+
+<td>1.00</td>
+
+<td>{{ item.total_hours }}</td>
+
+<td>{{ item.late }}</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr>
+<td colspan="7">No attendance data</td>
+</tr>
+
+{% endif %}
+
+</tbody>
+
+<tfoot>
+<tr>
+<td colspan="4"></td>
+<td>{{ total_portion }}</td>
+<td>{{ total_hours_sum }}</td>
+<td>{{ total_late }}</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+
+</div>
+</div>
+
+{% endblock body %}

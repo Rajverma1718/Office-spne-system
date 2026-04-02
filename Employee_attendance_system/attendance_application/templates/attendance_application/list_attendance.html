@@ -1,0 +1,178 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %} Attendance Records{% endblock %}
+
+{% block head %}
+<style>
+    .container {
+        margin-top: 60px;
+        padding: 20px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    th {
+        background-color: #0078d7;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    img {
+        max-width: 100px;
+        height: auto;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .no-data {
+        text-align: center;
+        font-style: italic;
+        padding: 40px 0;
+        color: #999;
+    }
+</style>
+{% endblock head %}
+
+{% block body %}
+<div class="container">
+    <h2>Your Attendance Records</h2>
+
+<form method="get">
+
+<select name="month">
+
+<option value="01">January</option>
+<option value="02">February</option>
+<option value="03">March</option>
+<option value="04">April</option>
+<option value="05">May</option>
+<option value="06">June</option>
+<option value="07">July</option>
+<option value="08">August</option>
+<option value="09">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+
+</select>
+
+<select name="year">
+
+<option value="2026">2026</option>
+<option value="2025">2025</option>
+<option value="2024">2024</option>
+<option value="2023">2023</option>
+
+</select>
+
+<button type="submit">Submit</button>
+
+<a href="{% url 'list_attendance' %}">
+<button type="button">Refresh</button>
+</a>
+
+<br><br>
+
+<label>
+
+<input type="checkbox" name="archive">
+
+Get Report From Archive Data
+
+</label>
+
+</form>
+
+
+{% if records %}
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Status</th>
+<th>Time</th>
+<th>Location</th>
+<th>Fence</th>
+<th>Remark</th>
+<th>Photo</th>
+</tr>
+</thead>
+<tbody>
+
+{% for record in records %}
+
+<tr>
+
+<td>{{ record.timestamp|date:"Y-m-d" }}</td>
+
+<td>
+
+{% if forloop.counter|divisibleby:2 %}
+
+<span style="color:red;font-weight:bolder;">Out</span>
+
+{% else %}
+
+<span style="color:green;font-weight:bolder;">In</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ record.timestamp|time:"h:i:A" }}</td>
+
+<td>{{ record.location }}</td>
+
+<td>{{ record.fence }}</td>
+
+<td>{{ record.remark|default:"—" }}</td>
+
+<td>
+
+{% if record.photo %}
+
+<img src="{{ record.photo.url }}">
+
+{% else %}
+
+No photo
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+{% else %}
+
+<p class="no-data">Yet attendance not recorded.</p>
+
+{% endif %}
+
+</div>
+{% endblock body %}
