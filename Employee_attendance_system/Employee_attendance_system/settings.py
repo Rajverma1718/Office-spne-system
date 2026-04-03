@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'attendance_application',
     'expense_application',
     'my_attendance_application',
+    'manager',
 ]
 
 MIDDLEWARE = [

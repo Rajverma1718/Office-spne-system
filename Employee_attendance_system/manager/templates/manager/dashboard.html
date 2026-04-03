@@ -1,0 +1,91 @@
+{% extends "manager/root.html" %}
+
+{% block body %}
+
+<style>
+.dashboard-container {
+    padding: 30px;
+}
+
+.dashboard-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.card-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    flex: 1 1 250px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.swipe-btn { background: #007d8a; }
+.leave-btn { background: #3498db; }
+.attendance-btn { background: #27ae60; }
+
+</style>
+
+<div class="container" style="margin-top:150px;">
+    <div class="dashboard-container">
+
+        <div class="dashboard-title">
+            👨‍💼 Manager Dashboard
+        </div>
+
+        <div class="card-grid">
+
+            <!-- Swipe Requests -->
+            <div class="dashboard-card">
+                <h3>Swipe Requests</h3>
+                <p>Approve / Reject employee swipe requests</p>
+
+                <a href="{% url 'swipe_request' %}">
+                    <button class="card-btn swipe-btn">View Requests</button>
+                </a>
+            </div>
+
+            <!-- Leave Requests -->
+            <div class="dashboard-card">
+                <h3>Leave Requests</h3>
+                <p>Manage employee leave applications</p>
+
+                <button class="card-btn leave-btn">Coming Soon</button>
+            </div>
+
+            <!-- Attendance -->
+            <div class="dashboard-card">
+                <h3>Attendance</h3>
+                <p>View team attendance records</p>
+
+                <button class="card-btn attendance-btn">Coming Soon</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

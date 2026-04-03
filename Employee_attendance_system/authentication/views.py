@@ -10,9 +10,14 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            return redirect('home')
-            
+            # ❌ Manager not allowed here
+            if not user.is_staff:
+                login(request, user)
+                return redirect('home')
+            else:
+                return render(request, 'authentication/user_login.html', {
+                    'error': 'Managers must login from Manager Login Page'
+                })
         else:
             return render(request, 'authentication/user_login.html', {
                 'error': 'Invalid username or password.'

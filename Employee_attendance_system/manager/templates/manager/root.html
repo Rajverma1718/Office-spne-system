@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KV System |{% block title %} {% endblock title %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #880700;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #881400;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            font-weight: bold;
+            margin: 0 40px 0 40px;
+        }
+    </style>
+
+
+    {% block head %} {% endblock head %}
+
+
+</head>
+
+<body>
+    <header class="header">
+        <h1>Kunal Vishwakarma and Co</h1>
+        <p>Welcome: {{ request.user.username }}</p>
+    </header>
+
+    <div class="container">
+        {% block body %} {% endblock body %}
+    </div>
+
+
+    
+
+
+
+    <script>
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+
+
+    <footer class="footer">
+        <div class="footer-nav">
+            <!-- <a href="{% url 'id_card' %}">Id Card</a>
+            <a href="{% url 'profile' %}">Profile</a> -->
+            <a href="{% url 'manager_dashboard' %}">Home</a>
+            <a href="{% url 'manager_logout' %}">Logout</a>
+
+
+        </div>
+        <div class="logo">kunal Vishwakarma</div>
+    </footer>
+
+
+</body>
+
+</html>

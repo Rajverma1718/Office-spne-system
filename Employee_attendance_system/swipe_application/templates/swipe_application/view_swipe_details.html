@@ -1,0 +1,193 @@
+{% extends "authentication/root.html" %}
+{% load static %}
+
+{% block title %} View Swipe Details {% endblock title %}
+
+{% block head %}
+<style>
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 100px 20px 80px 20px;
+}
+
+.content {
+    width: 100%;
+    max-width: 950px;
+    padding: 50px 60px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+h3 {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #0b5fa4;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: #0b5fa4;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* MESSAGE */
+.message-box {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* CARD GRID */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px; /* space between card-grid and table */
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-title {
+    font-size: 14px;
+    color: #777;
+}
+
+.card-count {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.total { border-left: 6px solid #007bff; }
+.approved { border-left: 6px solid #28a745; }
+.rejected { border-left: 6px solid #dc3545; }
+.pending { border-left: 6px solid #ffc107; }
+
+</style>
+{% endblock head %}
+
+{% block body %}
+
+<div class="container">
+    <div class="content">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <h3>📊 Swipe Summary</h3>
+
+        <!-- 🔥 CARD GRID ABOVE TABLE -->
+        <div class="card-grid">
+
+            <div class="dashboard-card total">
+                <div class="card-title">Total Swipes</div>
+                <div class="card-count">{{ total_swipes }}</div>
+            </div>
+
+            <div class="dashboard-card approved">
+                <div class="card-title">Approved</div>
+                <div class="card-count">{{ approved_count }}</div>
+                <a href="{% url 'approve_swipe' %}" class="card-link">View Approved</a>
+            </div>
+
+            <div class="dashboard-card rejected">
+                <div class="card-title">Rejected</div>
+                <div class="card-count">{{ rejected_count }}</div>
+                <a href="{% url 'reject_swipe' %}" class="card-link">View Rejected</a>
+            </div>
+
+            <div class="dashboard-card pending">
+                <div class="card-title">Pending</div>
+                <div class="card-count">{{ pending_count }}</div>
+                <a href="{% url 'recent_swipe' %}" class="card-link">View Pending</a>
+            </div>
+
+        </div>
+
+        <h3>Your Swipe Requests</h3>
+
+        <!-- TABLE -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Status</th>
+                    <th>Manager</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>{{ req.request_date }}</td>
+                    <td>{{ req.get_category_display }}</td>
+                    <td>{{ req.in_time|default:"-" }}</td>
+                    <td>{{ req.out_time|default:"-" }}</td>
+
+                    <td>
+                        {% if req.status == "approved" %}
+                            <span style="color:green;">Approved</span>
+                        {% elif req.status == "rejected" %}
+                            <span style="color:red;">Rejected</span>
+                        {% else %}
+                            <span style="color:orange;">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if req.manager %}
+                            {{ req.manager.username }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No requests yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

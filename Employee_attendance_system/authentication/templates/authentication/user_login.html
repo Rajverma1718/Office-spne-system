@@ -1,139 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login - K Vishwakarma and Co</title>
-  <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Login - K Vishwakarma and Co</title>
+    <link rel="stylesheet" href="style.css" />
 
-<style>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* FIX for mobile */
+        padding: 15px; /* spacing on small screens */
+      }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+      .login-container {
+        width: 100%;
+        max-width: 400px;
+      }
 
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-}
+      .login-box {
+        background: #fff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-.login-box {
-  background: #fff;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+      .login-box h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+      }
 
-.login-box h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+      form label {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #555;
+      }
 
-form label {
-  display: block;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #555;
-}
+      form input[type="text"],
+      form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-bottom: 2px solid #0074a6;
+        font-size: 16px;
+        outline: none;
+      }
 
-form input[type="text"],
-form input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-bottom: 2px solid #0074a6;
-  font-size: 16px;
-  outline: none;
-}
+      .login-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #0074a6;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        margin-top: 25px;
+        cursor: pointer;
+      }
 
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: #0074a6;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  margin-top: 25px;
-  cursor: pointer;
-}
+      .login-btn:hover {
+        background-color: #005b84;
+      }
 
-.login-btn:hover {
-  background-color: #005b84;
-}
+      .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        margin-top: 15px;
+        flex-wrap: wrap; /* important for mobile */
+        gap: 10px;
+      }
 
-.remember-forgot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  margin-top: 15px;
-}
+      .remember-forgot a {
+        text-decoration: none;
+        color: #0074a6;
+      }
 
-.remember-forgot a {
-  text-decoration: none;
-  color: #0074a6;
-}
+      .remember-forgot span {
+        font-weight: bold;
+      }
 
-.remember-forgot span {
-  font-weight: bold;
-}
+      .extra-links {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+      }
 
-.footer {
-  font-size: 12px;
-  color: gray;
-  margin-top: 25px;
-  text-align: center;
-}
+      .extra-links a {
+        text-decoration: none;
+        color: #0074a6;
+      }
 
+      .error {
+        color: red;
+        margin-top: 10px;
+        text-align: center;
+      }
 
-</style>
+      .footer {
+        font-size: 12px;
+        color: gray;
+        margin-top: 25px;
+        text-align: center;
+      }
 
-</head>
-<body>
-  <div class="login-container">
-    <div class="login-box">
-      <h2>Kunal Vishwakarma & Co</h2>
+      /* 🔥 RESPONSIVE BREAKPOINTS */
 
-      <form method="POST" novalidate>
-        {% csrf_token %}
+      /* Tablet */
+      @media (max-width: 768px) {
+        .login-box {
+          padding: 20px;
+        }
 
-        <label for="company">Company Code</label>
-        <input type="text" id="company" value="KCVISH" readonly>
-       
-        {% if error %}
-        <br>
-        <br>
-          <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <label for="username">User name</label>
-        <input type="text" id="username" name="username" required>
+        .login-box h2 {
+          font-size: 20px;
+        }
+      }
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
+      /* Mobile */
+      @media (max-width: 480px) {
+        body {
+          align-items: flex-start; /* prevent vertical squeeze */
+          margin-top: 50px;
+        }
 
-        <button type="submit" class="login-btn">LOGIN</button>
+        .login-box {
+          padding: 18px;
+          border-radius: 8px;
+        }
 
-        <div class="remember-forgot">
-          <label><input type="checkbox" checked> Remember Me</label>
-          <a href="#">Forgot <span>Password</span> ?</a>
-        </div>
+        .login-box h2 {
+          font-size: 18px;
+        }
 
-        <p class="footer">Developed by Kunal Technologies India Pvt. Ltd.</p>
-      </form>
+        form input {
+          font-size: 14px;
+        }
+
+        .login-btn {
+          font-size: 14px;
+          padding: 10px;
+        }
+
+        .remember-forgot {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .extra-links {
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Kunal Vishwakarma & Co</h2>
+
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+          <label for="company">Company Code</label>
+          <input type="text" id="company" value="KCVISH" readonly />
+
+          {% if error %}
+          <br />
+          <br />
+          <p style="color: red">{{ error }}</p>
+          {% endif %}
+
+          <label for="username">User name</label>
+          <input type="text" id="username" name="username" required />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit" class="login-btn">LOGIN</button>
+
+          <div class="remember-forgot">
+            <label><input type="checkbox" checked /> Remember Me</label>
+            <a href="#">Forgot <span>Password</span> ?</a>
+          </div>
+
+          <div class="extra-links">
+            <a href="{% url 'manager_login' %}">Click here for Manager Login</a>
+          </div>
+
+          <p class="footer">Developed by Kunal Technologies India Pvt. Ltd.</p>
+        </form>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

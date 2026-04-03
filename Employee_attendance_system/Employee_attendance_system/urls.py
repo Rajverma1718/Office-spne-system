@@ -27,6 +27,7 @@ urlpatterns = [
     path('attendance_application/', include('attendance_application.urls')), # attendance_application app urls
     path('expense_application/', include('expense_application.urls')), # expense_application app urls
     path('my_attendance_application/', include('my_attendance_application.urls')), # my_attendance_application app urls
+    path('manager/', include('manager.urls')), # manager app urls
 ]
 
 

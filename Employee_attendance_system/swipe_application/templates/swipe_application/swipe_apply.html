@@ -63,9 +63,7 @@ label {
     color: #333;
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
     width: 100%;
     padding: 13px;
     border-radius: 8px;
@@ -77,9 +75,7 @@ textarea {
     margin-bottom: 20px;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus, textarea:focus {
     border-color: #0b5fa4;
     background: #fff;
     outline: none;
@@ -99,9 +95,7 @@ textarea:focus {
     border: none;
     border-radius: 8px;
     font-weight: 600;
-    font-size: 14px;
     cursor: pointer;
-    transition: 0.3s ease;
 }
 
 .form-buttons button[type="submit"] {
@@ -109,17 +103,9 @@ textarea:focus {
     color: white;
 }
 
-.form-buttons button[type="submit"]:hover {
-    background: #094d87;
-}
-
 .form-buttons button[type="reset"] {
     background: #888;
     color: white;
-}
-
-.form-buttons button[type="reset"]:hover {
-    background: #666;
 }
 
 /* ===== TABLE ===== */
@@ -133,15 +119,12 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
 th {
     background-color: #0b5fa4;
     color: white;
     padding: 12px;
-    text-align: center;
 }
 
 td {
@@ -152,25 +135,6 @@ td {
 
 tr:hover {
     background-color: #f9f9f9;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-
-    .content {
-        padding: 30px 20px;
-    }
-
-    .main-content {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .form-buttons {
-        flex-direction: column;
-    }
-
 }
 
 </style>
@@ -186,6 +150,7 @@ tr:hover {
             <a href="{% url 'swipe_home' %}" class="back-btn">Back</a>
         </div>
 
+        <!-- 🔹 FORM -->
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
@@ -196,6 +161,7 @@ tr:hover {
             </div>
         </form>
 
+        <!-- 🔹 TABLE
         <h3>Your Swipe Requests</h3>
 
         <table>
@@ -203,9 +169,10 @@ tr:hover {
                 <tr>
                     <th>Date</th>
                     <th>Category</th>
-                    <th>Mode</th>
                     <th>In Time</th>
                     <th>Out Time</th>
+                    <th>Status</th>
+                    <th>Manager</th>
                 </tr>
             </thead>
             <tbody>
@@ -213,17 +180,34 @@ tr:hover {
                 <tr>
                     <td>{{ req.request_date }}</td>
                     <td>{{ req.get_category_display }}</td>
-                    <td>{{ req.get_inout_mode_display }}</td>
                     <td>{{ req.in_time|default:"-" }}</td>
                     <td>{{ req.out_time|default:"-" }}</td>
+
+                    <td>
+                        {% if req.status == "approved" %}
+                            <span style="color:green;">Approved</span>
+                        {% elif req.status == "rejected" %}
+                            <span style="color:red;">Rejected</span>
+                        {% else %}
+                            <span style="color:orange;">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if req.manager %}
+                            {{ req.manager.username }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5">No requests yet.</td>
+                    <td colspan="6">No requests yet.</td>
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table> -->
 
     </div>
 </div>

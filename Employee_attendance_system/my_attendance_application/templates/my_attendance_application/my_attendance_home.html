@@ -1,7 +1,7 @@
 {% extends "authentication/root.html" %}
 {% load static %}
 
-{% block title %} Leave Menu {% endblock title %}
+{% block title %} My Attendance {% endblock title %}
 
 {% block head %}
 
@@ -11,7 +11,6 @@
 display:flex;
 padding:20px;
 justify-self: center;
-
 width:90%;
 }
 
@@ -43,35 +42,38 @@ background:white;
 cursor:pointer;
 }
 
-.notes{
-margin-bottom:15px;
-color:#444;
-}
-
-.dot{
-height:8px;
-width:8px;
-background:#ccc;
-border-radius:50%;
-display:inline-block;
-}
-
 .filters{
 display:flex;
 gap:10px;
 margin-bottom:10px;
+flex-wrap:wrap;
 }
 
 .filters select{
 padding:6px;
 }
 
+.submit-btn{
+padding:6px 12px;
+background:#1c5d8a;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
 .refresh-btn{
 padding:6px 12px;
+background:#999;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
 }
 
 .status{
 margin:15px 0;
+font-size:14px;
 }
 
 .red-dot{
@@ -80,16 +82,17 @@ width:10px;
 background:red;
 display:inline-block;
 border-radius:50%;
+margin-right:4px;
 }
 
 .attendance-table{
 width:100%;
 border-collapse:collapse;
-
+margin-top:10px;
 }
 
 .attendance-table th{
-    background: rgba(0, 128, 0, 0.386);
+background: rgba(0, 128, 0, 0.3);
 }
 
 .attendance-table th,
@@ -108,6 +111,13 @@ background:#a8bed6;
 font-weight:bold;
 }
 
+.sr-label{
+color:blue;
+font-size:12px;
+font-weight:bold;
+margin-left:5px;
+}
+
 </style>
 
 {% endblock head %}
@@ -121,7 +131,9 @@ font-weight:bold;
 
 <div class="attendance-header">
 <h2>My Attendance</h2>
-<a href="{% url 'home' %}"><button class="back-btn">Back</button></a>
+<a href="{% url 'home' %}">
+<button class="back-btn">Back</button>
+</a>
 </div>
 
 <form method="get">
@@ -170,7 +182,6 @@ Get Report From Archive Data
 <span class="red-dot"></span> DA (Day Absent)
 <span class="red-dot"></span> SR (Swipe Request)
 <span class="red-dot"></span> WO (Weekly Off)
-<span class="red-dot"></span> WFH (Work Form Home)
 <span class="red-dot"></span> PH (Public Holiday)
 </div>
 
@@ -183,7 +194,7 @@ Get Report From Archive Data
 <th>OUT Time</th>
 <th>DA Type</th>
 <th>Portion</th>
-<th>Tot. Hrs.</th>
+<th>Total Hours</th>
 <th>Late</th>
 </tr>
 </thead>
@@ -198,19 +209,31 @@ Get Report From Archive Data
 
 <td>{{ item.date|date:"d-M-Y (D)" }}</td>
 
+<!-- ✅ IN TIME -->
 <td>
 {% if item.clock_in %}
 <span class="red-dot"></span>
 {{ item.clock_in.timestamp|time:"h:i A" }}
+
+{% if item.is_swipe_in %}
+<span class="sr-label">(SR)</span>
+{% endif %}
+
 {% else %}
 --
 {% endif %}
 </td>
 
+<!-- ✅ OUT TIME -->
 <td>
 {% if item.clock_out %}
 <span class="red-dot"></span>
 {{ item.clock_out.timestamp|time:"h:i A" }}
+
+{% if item.is_swipe_out %}
+<span class="sr-label">(SR)</span>
+{% endif %}
+
 {% else %}
 --
 {% endif %}
