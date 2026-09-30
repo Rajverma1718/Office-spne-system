@@ -11,23 +11,31 @@
 
 <style>
 
-/* ===== PAGE LAYOUT ===== */
+/* ===== BODY ===== */
+body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+/* ===== CONTAINER ===== */
 .container {
     width: 100%;
     display: flex;
-    justify-content: center;   
-    padding: 100px 20px 80px 20px;
-    box-sizing: border-box;
+    justify-content: center;
+    padding: 60px 10px;
 }
 
 /* ===== CARD ===== */
 .content {
     width: 100%;
-    max-width: 950px;          
-    padding: 50px 60px;
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    max-width: 950px;
+    padding: 30px;
+
+    backdrop-filter: blur(18px);
+    background: rgba(255,255,255,0.08);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.1);
+
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }
 
 /* ===== HEADER ===== */
@@ -38,150 +46,180 @@
 }
 
 .main-content h1 {
-    font-size: 28px;
-    color: #0b5fa4;
-    margin: 0;
+    font-size: 24px;
+    color: #fff;
     font-weight: 600;
 }
 
+/* BACK BUTTON */
 .back-btn {
-    padding: 9px 20px;
-    border: 1px solid #0b5fa4;
-    border-radius: 8px;
-    background: white;
-    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 25px;
     text-decoration: none;
-    color: #0b5fa4;
-    transition: 0.3s ease;
+    font-size: 13px;
+
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+
+    transition: 0.3s;
 }
 
 .back-btn:hover {
-    background: #0b5fa4;
-    color: white;
+    transform: scale(1.05);
 }
 
 /* ===== FORM ===== */
 label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: inline-block;
-    color: #333;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+    color: #ddd;
 }
 
 .required {
-    color: red;
-    margin-left: 4px;
+    color: #ff6b6b;
 }
 
-input,
-select,
-textarea {
+/* INPUT */
+input, textarea, select {
     width: 100%;
     padding: 13px;
-    border-radius: 8px;
-    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
     font-size: 14px;
-    background-color: #f9f9f9;
-    transition: 0.3s ease;
-    box-sizing: border-box;
+
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+
+    transition: 0.3s;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    border-color: #0b5fa4;
-    background: #fff;
+/* FOCUS */
+input:focus, textarea:focus, select:focus {
+    border-color: #00c6ff;
+    box-shadow: 0 0 12px rgba(0,198,255,0.5);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(11, 95, 164, 0.1);
 }
 
-/* Errors */
-.errorlist {
-    list-style: none;
-    padding: 0;
-    margin: 6px 0 0;
-    color: red;
-    font-size: 13px;
+/* SELECT */
+select {
+    appearance: none;
+    cursor: pointer;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
+select option {
+    background: #1e2a30;
+    color: #fff;
+}
+
+/* FORM GROUP */
 .form-group {
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
-/* ===== ROW LAYOUT ===== */
+/* ROW */
 .row {
     display: flex;
-    gap: 30px;
-    margin-bottom: 5px;
+    gap: 20px;
 }
 
 .row .form-group {
     flex: 1;
-    min-width: 240px;
 }
 
-/* Note */
+/* NOTE */
 .note {
     font-size: 14px;
-    color: #666;
-    margin: 18px 0 18px 0;
+    color: #ccc;
+    margin: 15px 0;
 }
 
-/* ===== BUTTONS ===== */
+/* ERRORS */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+    color: #ff6b6b;
+    font-size: 13px;
+}
+
+/* BUTTONS */
 .buttons {
     display: flex;
-    gap: 18px;
-    margin-top: 35px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 button {
-    padding: 13px 30px;
+    flex: 1;
+    padding: 14px;
+    border-radius: 30px;
     border: none;
-    border-radius: 8px;
     font-weight: 600;
-    font-size: 14px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
 button.apply {
-    background: #0b5fa4;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
 }
 
 button.apply:hover {
-    background: #094d87;
+    transform: translateY(-3px);
 }
 
 button.reset {
-    background: #888;
-    color: white;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
 }
 
-button.reset:hover {
-    background: #666;
+/* ===== DESKTOP ===== */
+@media (min-width: 768px) {
+    .content {
+        padding: 40px;
+    }
+
+    .buttons {
+        max-width: 400px;
+        margin-left: auto;
+    }
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
 
     .container {
-        padding: 130px 15px 80px 15px;
-    }
-
-    .content {
-        padding: 30px 20px;
+        padding: 80px 15px;
     }
 
     .row {
         flex-direction: column;
-        gap: 20px;
     }
 
     .main-content {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .main-content h1 {
+        font-size: 18px;
+    }
+
+    input, select, textarea {
+        font-size: 15px;
+    }
+
+    .buttons {
+        flex-direction: column;
     }
 }
 
@@ -208,26 +246,20 @@ button.reset:hover {
             <div class="note">Note: Apply Leave for Period</div>
 
             <div class="form-group">
-                <label>
-                {{ form.period.label }}<span class="required">*</span>
-                </label>
+                <label>{{ form.period.label }}<span class="required">*</span></label>
                 {{ form.period }}
                 {{ form.period.errors }}
             </div>
 
             <div class="row">
                 <div class="form-group">
-                    <label>
-                    {{ form.from_date.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.from_date.label }}<span class="required">*</span></label>
                     {{ form.from_date }}
                     {{ form.from_date.errors }}
                 </div>
 
                 <div class="form-group">
-                    <label>
-                    {{ form.to_date.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.to_date.label }}<span class="required">*</span></label>
                     {{ form.to_date }}
                     {{ form.to_date.errors }}
                 </div>
@@ -235,17 +267,13 @@ button.reset:hover {
 
             <div class="row">
                 <div class="form-group">
-                    <label>
-                    {{ form.start_day.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.start_day.label }}<span class="required">*</span></label>
                     {{ form.start_day }}
                     {{ form.start_day.errors }}
                 </div>
 
                 <div class="form-group">
-                    <label>
-                    {{ form.end_day.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.end_day.label }}<span class="required">*</span></label>
                     {{ form.end_day }}
                     {{ form.end_day.errors }}
                 </div>
@@ -253,50 +281,38 @@ button.reset:hover {
 
             <div class="row">
                 <div class="form-group">
-                    <label>
-                    {{ form.half_start.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.half_start.label }}<span class="required">*</span></label>
                     {{ form.half_start }}
                     {{ form.half_start.errors }}
                 </div>
 
                 <div class="form-group">
-                    <label>
-                    {{ form.half_end.label }}<span class="required">*</span>
-                    </label>
+                    <label>{{ form.half_end.label }}<span class="required">*</span></label>
                     {{ form.half_end }}
                     {{ form.half_end.errors }}
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                {{ form.leave_type.label }}<span class="required">*</span>
-                </label>
+                <label>{{ form.leave_type.label }}<span class="required">*</span></label>
                 {{ form.leave_type }}
                 {{ form.leave_type.errors }}
             </div>
 
             <div class="form-group">
-                <label>
-                {{ form.total_days.label }}<span class="required">*</span>
-                </label>
+                <label>{{ form.total_days.label }}<span class="required">*</span></label>
                 {{ form.total_days }}
                 {{ form.total_days.errors }}
             </div>
 
             <div class="form-group">
-                <label>
-                {{ form.reason.label }}<span class="required">*</span>
-                </label>
+                <label>{{ form.reason.label }}<span class="required">*</span></label>
                 {{ form.reason }}
                 {{ form.reason.errors }}
             </div>
 
             <div class="form-group">
-                <label>
-                {{ form.document.label }}
-                </label>
+                <label>{{ form.document.label }}</label>
                 {{ form.document }}
                 {{ form.document.errors }}
             </div>

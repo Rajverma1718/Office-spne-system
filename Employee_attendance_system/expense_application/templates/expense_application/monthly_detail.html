@@ -1,0 +1,203 @@
+{% extends "authentication/root.html" %}
+
+{% block head %}
+<style>
+
+
+/* ===== TITLE ===== */
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:white;
+}
+
+/* ===== GLASS CARD ===== */
+.voucher-card{
+    border-radius:14px;
+    margin-bottom:20px;
+    overflow:hidden;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border:1px solid rgba(255,255,255,0.15);
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+
+    color:white;
+}
+
+/* ===== HEADER ===== */
+.voucher-header{
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    font-weight:600;
+}
+
+/* ===== TOTAL BOX ===== */
+.amount-box{
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    font-weight:bold;
+    color:#fff;
+}
+
+.final{
+    color:#00ff9d;
+}
+
+/* ===== TABLE WRAPPER (responsive fix) ===== */
+.table-wrapper{
+    overflow-x:auto;
+}
+
+/* ===== TABLE ===== */
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    min-width:900px;
+}
+
+.table th{
+    background: rgba(0,198,255,0.2);
+    color:white;
+    padding:10px;
+    font-size:13px;
+}
+
+.table td{
+    padding:8px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    text-align:center;
+    font-size:13px;
+    color:white;
+}
+
+/* ===== STATUS COLORS ===== */
+.status-approved {
+    color: #00ff9d;
+    font-weight: bold;
+}
+.status-rejected {
+    color: #ff4d4d;
+    font-weight: bold;
+}
+.status-pending {
+    color: #ffd200;
+    font-weight: bold;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    padding:10px;
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+    color:white;
+    text-decoration:none;
+    border-radius:20px;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+    .table{
+        font-size:12px;
+    }
+}
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+<h2>💼 Monthly Expense Voucher</h2>
+
+<div class="voucher-card">
+
+    <!-- HEADER -->
+    <div class="voucher-header">
+        Month : {{ month_name }}
+    </div>
+
+    <!-- TOTAL -->
+    <div class="amount-box">
+        Total Amount : {{ total_amount }}
+        <span class="final">({{ total_final }})</span>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+<table class="table">
+
+    <tr>
+        <th>Date</th>
+        <th>Expense Name</th>
+        <th>Claimed Amount</th>
+        <th>Approved Amount</th>
+        <th>Project</th>
+        <th>City</th>
+        <th>Status</th>
+        <th>Remarks</th> <!-- ✅ ADDED -->
+        <th>Document</th>
+        <th>Bill</th>
+    </tr>
+
+    {% for exp in expenses %}
+    <tr>
+
+        <td>{{ exp.date|date:"d-M-y" }}</td>
+        <td>{{ exp.expense }}</td>
+        <td>{{ exp.amount }}</td>
+        <td>{{ exp.final_amount }}</td>
+        <td>{{ exp.project }}</td>
+        <td>{{ exp.city }}</td>
+
+        <!-- STATUS -->
+        <td>
+            {% if exp.status == 'approved' %}
+                <span class="status-approved">Approved</span>
+            {% elif exp.status == 'rejected' %}
+                <span class="status-rejected">Rejected</span>
+            {% else %}
+                <span class="status-pending">Pending</span>
+            {% endif %}
+        </td>
+
+        <!-- ✅ REMARKS -->
+        <td>{{ exp.remarks|default:"-" }}</td>
+
+        <!-- DOCUMENT -->
+        <td>
+            {% if exp.document %}
+                <a href="{{ exp.document.url }}" target="_blank" style="color:#00c6ff;">View</a>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+        <!-- BILL -->
+        <td>
+            {% if exp.bill %}
+                <a href="{{ exp.bill.url }}" target="_blank" style="color:#00c6ff;">View</a>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+</div>
+</div>
+
+<a href="{% url 'recent_expenses' %}" class="back-btn">⬅ Back</a>
+
+</div>
+
+{% endblock %}

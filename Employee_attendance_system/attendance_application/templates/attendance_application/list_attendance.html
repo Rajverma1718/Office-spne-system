@@ -1,178 +1,341 @@
 {% extends "authentication/root.html" %}
 {% load static %}
 
-{% block title %} Attendance Records{% endblock %}
+{% block title %} Attendance Records {% endblock %}
 
 {% block head %}
 <style>
+
+/* ===== MAIN CONTAINER CENTER ===== */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 40px 0px 40px;
+    padding: 20px;
+}
+
+/* ===== CARD ===== */
+.card {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+/* ===== HEADING ===== */
+h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+
+/* ===== FORM ===== */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.filter-form select,
+.filter-form button {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    min-width: 120px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    background: #0078d7;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-refresh {
+    background: #444;
+}
+
+/* ===== CHECKBOX ===== */
+.checkbox {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ===== TABLE ===== */
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+    background: rgba(255,255,255,0.15);
+    color: black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid gray;
+    text-align: left;
+    color: white;
+}
+
+th {
+    background-color: #0078d7;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ===== STATUS ===== */
+.in {
+    color: green;
+    font-weight: bold;
+}
+
+.out {
+    color: red;
+    font-weight: bold;
+}
+
+/* ===== IMAGE ===== */
+img {
+    max-width: 80px;
+    border-radius: 6px;
+}
+
+/* ===== MOBILE CARDS ===== */
+.mobile-cards {
+    display: none;
+}
+
+.record-card {
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.record-card div {
+    margin-bottom: 6px;
+}
+
+/* ===== NO DATA ===== */
+.no-data {
+    text-align: center;
+    padding: 30px;
+    color: #ddd;
+}
+
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+
     .container {
-        margin-top: 60px;
+        margin-top: 40px;
+        padding: 10px;
+    }
+
+    .card {
         padding: 20px;
     }
 
     h2 {
-        margin-bottom: 20px;
-        font-size: 24px;
+        font-size: 18px;
     }
 
-    table {
+    /* FORM */
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form select,
+    .filter-form button {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
     }
 
-    th, td {
-        padding: 12px 15px;
-        border: 1px solid #ddd;
+    .checkbox {
         text-align: left;
-        vertical-align: top;
     }
 
-    th {
-        background-color: #0078d7;
-        color: white;
+    /* HIDE TABLE */
+    .table-wrapper {
+        display: none;
     }
 
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
+    /* SHOW CARDS */
+    .mobile-cards {
+        display: block;
+        margin-top: 15px;
     }
 
     img {
-        max-width: 100px;
-        height: auto;
-        border-radius: 6px;
-        border: 1px solid #ccc;
+        max-width: 60px;
     }
+}
 
-    .no-data {
-        text-align: center;
-        font-style: italic;
-        padding: 40px 0;
-        color: #999;
-    }
 </style>
-{% endblock head %}
+{% endblock %}
 
 {% block body %}
+
 <div class="container">
-    <h2>Your Attendance Records</h2>
+    <div class="card">
 
-<form method="get">
+        <h2>Your Attendance Records</h2>
 
-<select name="month">
+        <!-- FILTER FORM -->
+        <form method="get" class="filter-form">
 
-<option value="01">January</option>
-<option value="02">February</option>
-<option value="03">March</option>
-<option value="04">April</option>
-<option value="05">May</option>
-<option value="06">June</option>
-<option value="07">July</option>
-<option value="08">August</option>
-<option value="09">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+            <select name="month">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
 
-</select>
+            <select name="year">
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
 
-<select name="year">
+            <button type="submit" class="btn">Submit</button>
 
-<option value="2026">2026</option>
-<option value="2025">2025</option>
-<option value="2024">2024</option>
-<option value="2023">2023</option>
+            <a href="{% url 'list_attendance' %}">
+                <button type="button" class="btn btn-refresh">Refresh</button>
+            </a>
 
-</select>
+            <label class="checkbox">
+                <input type="checkbox" name="archive">
+                Get Report From Archive Data
+            </label>
 
-<button type="submit">Submit</button>
+        </form>
 
-<a href="{% url 'list_attendance' %}">
-<button type="button">Refresh</button>
-</a>
+        {% if records %}
 
-<br><br>
+        <!-- DESKTOP TABLE -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                        <th>Location</th>
+                        <th>Fence</th>
+                        <th>Remark</th>
+                        <th>Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-<label>
+                    {% for record in records %}
+                    <tr>
 
-<input type="checkbox" name="archive">
+                        <td>{{ record.timestamp|date:"Y-m-d" }}</td>
 
-Get Report From Archive Data
+                        <td>
+                            {% if forloop.counter|divisibleby:2 %}
+                                <span class="out">Out</span>
+                            {% else %}
+                                <span class="in">In</span>
+                            {% endif %}
+                        </td>
 
-</label>
+                        <td>{{ record.timestamp|time:"h:i:A" }}</td>
 
-</form>
+                        <td style="min-width:200px;">
+                            {{ record.location }}
+                        </td>
 
+                        <td>{{ record.fence }}</td>
 
-{% if records %}
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Status</th>
-<th>Time</th>
-<th>Location</th>
-<th>Fence</th>
-<th>Remark</th>
-<th>Photo</th>
-</tr>
-</thead>
-<tbody>
+                        <td>{{ record.remark|default:"—" }}</td>
 
-{% for record in records %}
+                        <td>
+                            {% if record.photo %}
+                                <img src="{{ record.photo.url }}">
+                            {% else %}
+                                No photo
+                            {% endif %}
+                        </td>
 
-<tr>
+                    </tr>
+                    {% endfor %}
 
-<td>{{ record.timestamp|date:"Y-m-d" }}</td>
+                </tbody>
+            </table>
+        </div>
 
-<td>
+        <!-- MOBILE CARDS -->
+        <div class="mobile-cards">
 
-{% if forloop.counter|divisibleby:2 %}
+            {% for record in records %}
+            <div class="record-card">
 
-<span style="color:red;font-weight:bolder;">Out</span>
+                <div><strong>Date:</strong> {{ record.timestamp|date:"Y-m-d" }}</div>
 
-{% else %}
+                <div>
+                    <strong>Status:</strong>
+                    {% if forloop.counter|divisibleby:2 %}
+                        <span class="out">Out</span>
+                    {% else %}
+                        <span class="in">In</span>
+                    {% endif %}
+                </div>
 
-<span style="color:green;font-weight:bolder;">In</span>
+                <div><strong>Time:</strong> {{ record.timestamp|time:"h:i:A" }}</div>
 
-{% endif %}
+                <div><strong>Location:</strong> {{ record.location }}</div>
 
-</td>
+                <div><strong>Fence:</strong> {{ record.fence }}</div>
 
-<td>{{ record.timestamp|time:"h:i:A" }}</td>
+                <div><strong>Remark:</strong> {{ record.remark|default:"—" }}</div>
 
-<td>{{ record.location }}</td>
+                <div>
+                    <strong>Photo:</strong><br>
+                    {% if record.photo %}
+                        <img src="{{ record.photo.url }}">
+                    {% else %}
+                        No photo
+                    {% endif %}
+                </div>
 
-<td>{{ record.fence }}</td>
+            </div>
+            {% endfor %}
 
-<td>{{ record.remark|default:"—" }}</td>
+        </div>
 
-<td>
+        {% else %}
+            <p class="no-data">Yet attendance not recorded.</p>
+        {% endif %}
 
-{% if record.photo %}
-
-<img src="{{ record.photo.url }}">
-
-{% else %}
-
-No photo
-
-{% endif %}
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-</table>
-
-{% else %}
-
-<p class="no-data">Yet attendance not recorded.</p>
-
-{% endif %}
-
+    </div>
 </div>
-{% endblock body %}
+
+{% endblock %}

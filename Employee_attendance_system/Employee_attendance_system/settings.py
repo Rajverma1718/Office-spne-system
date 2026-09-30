@@ -26,8 +26,14 @@ SECRET_KEY = 'django-insecure--&u7=23cq_4nt*i@-tx#f)xm1%2zypk$!vr&aciq!3%#hqr*_d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.trycloudflare.com"
+]
+# cloudflared.exe tunnel --url http://localhost:8000
+
+# cloudflared tunnel --url http://localhost:8000 --protocol http2
 
 # Application definition
 
@@ -46,6 +52,8 @@ INSTALLED_APPS = [
     'attendance_application',
     'expense_application',
     'my_attendance_application',
+    # 'self_service_application',
+    'quick_info_application',
     'manager',
 ]
 

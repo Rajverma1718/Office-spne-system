@@ -27,7 +27,7 @@ class SwipeApplication(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='manager_swipes'    # 👈 change
+        related_name='manager_swipes' 
     )
 
     category = models.CharField(max_length=20, choices=SWIPE_CATEGORIES)

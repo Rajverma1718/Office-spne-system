@@ -1,0 +1,156 @@
+{% extends "manager/root.html" %}
+
+{% block body %}
+
+<style>
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    color: #fff;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* TOP BUTTONS */
+.top-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.top-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.approve-btn {
+    background: linear-gradient(135deg, #1abc9c, #3498db);
+    color: white;
+}
+
+.reject-btn {
+    background: #555;
+    color: white;
+}
+
+/* TABLE */
+.table-container {
+    overflow-x: auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background: rgba(255,255,255,0.1);
+    font-weight: bold;
+}
+
+tr {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    th, td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+</style>
+
+<div class="container">
+
+<h2>📊 Expense Results</h2>
+
+<form method="POST" action="{% url 'bulk_action' %}">
+    {% csrf_token %}
+
+    <!-- TOP BUTTONS -->
+    <div class="top-actions">
+        <button type="submit" name="action" value="approve" class="approve-btn">
+            ✅ Approve Selected
+        </button>
+
+        <button type="submit" name="action" value="reject" class="reject-btn">
+            ❌ Reject Selected
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>Date</th>
+                    <th>City</th>
+                    <th>Expense</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                    <th>Document</th>
+                    <th>Bill</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for exp in expenses %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="selected_expenses" value="{{ exp.id }}">
+                    </td>
+                    <td>{{ exp.date }}</td>
+                    <td>{{ exp.city }}</td>
+                    <td>{{ exp.project }}</td>
+                    <td>₹{{ exp.amount }}</td>
+                    <td>{{ exp.remarks }}</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</form>
+
+</div>
+
+<!-- SELECT ALL SCRIPT -->
+<script>
+document.getElementById("selectAll").addEventListener("change", function() {
+    let checkboxes = document.querySelectorAll('input[name="selected_expenses"]');
+    for (let cb of checkboxes) {
+        cb.checked = this.checked;
+    }
+});
+</script>
+
+{% endblock %}

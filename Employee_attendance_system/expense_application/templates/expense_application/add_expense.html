@@ -1,257 +1,263 @@
 {% extends "authentication/root.html" %}
 {% load static %}
 
-{% block title %} Add Expense {% endblock title %}
+{% block title %}Add Expense{% endblock title %}
 
 {% block head %}
+
 <style>
 
-/* ===== PAGE LAYOUT ===== */
-.container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 100px 20px 80px 20px;
-    box-sizing: border-box;
+/* ================= CARD ================= */
+.card{
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding:25px;
+    border-radius:20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    color:#fff;
 }
 
-/* ===== CARD ===== */
-.content {
-    width: 100%;
-    max-width: 950px;
-    padding: 50px 60px;
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+/* TITLE */
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:600;
 }
 
-/* ===== HEADER ===== */
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+/* ================= GRID ================= */
+.grid{ display:grid; gap:15px; }
+.grid-2{ display:grid; gap:15px; }
+
+/* ================= LABEL ================= */
+label{
+    font-size:13px;
+    margin-bottom:5px;
+    display:block;
+    color:#e5e5e5;
 }
 
-.main-content h1 {
-    font-size: 28px;
-    color: #0b5fa4;
-    margin: 0;
-    font-weight: 600;
+/* ================= INPUT ================= */
+input, select, textarea{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.2);
+    font-size:14px;
+    background: rgba(255,255,255,0.1);
+    color:#fff;
+    outline:none;
+    transition:0.3s;
 }
 
-.back-btn {
-    padding: 9px 20px;
-    border: 1px solid #0b5fa4;
-    border-radius: 8px;
-    background: white;
-    font-weight: 600;
-    text-decoration: none;
-    color: #0b5fa4;
-    transition: 0.3s ease;
+/* Placeholder */
+input::placeholder, textarea::placeholder{
+    color: rgba(255,255,255,0.6);
 }
 
-.back-btn:hover {
-    background: #0b5fa4;
-    color: white;
+/* Focus */
+input:focus, select:focus, textarea:focus{
+    border-color:#00c6ff;
+    box-shadow:0 0 10px rgba(0,198,255,0.4);
+    background: rgba(255,255,255,0.15);
 }
 
-/* ===== FORM ===== */
-label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-    color: #333;
+/* TEXTAREA */
+textarea{
+    resize:none;
+    min-height:90px;
 }
 
-.required {
-    color: red;
-    margin-left: 4px;
+/* ================= SELECT FIX ================= */
+select{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    cursor:pointer;
+
+    background: rgba(255,255,255,0.1);
+    color:#fff;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:16px;
 }
 
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    border: 1px solid #dcdcdc;
-    font-size: 14px;
-    background-color: #f9f9f9;
-    transition: 0.3s ease;
-    box-sizing: border-box;
-    margin-bottom: 20px;
+/* Dropdown options fix */
+select option{
+    background:#1e293b;
+    color:#fff;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    border-color: #0b5fa4;
-    background: #fff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(11, 95, 164, 0.1);
+/* ================= BUTTON ================= */
+.btn{
+    width:100%;
+    margin-top:15px;
+    padding:13px;
+    border:none;
+    border-radius:14px;
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
 }
 
-/* Expense limit button */
-.exp-limit-btn {
-    display: inline-block;
-    margin-top: -10px;
-    margin-bottom: 20px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    background-color: #eef3f9;
-    color: #0b5fa4;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+.btn:hover{
+    transform: translateY(-2px);
+    box-shadow:0 10px 25px rgba(0,198,255,0.3);
 }
 
-.exp-limit-btn:hover {
-    background-color: #dce8f5;
-}
-
-/* ===== BUTTONS ===== */
-.btn-group {
-    display: flex;
-    gap: 18px;
-    margin-top: 30px;
-}
-
-.btn-group button {
-    flex: 1;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-/* Save */
-.btn-group button:nth-child(1) {
-    background: #0b5fa4;
-    color: white;
-}
-
-.btn-group button:nth-child(1):hover {
-    background: #094d87;
-}
-
-/* Cancel */
-.btn-group button:nth-child(2) {
-    background: #888;
-    color: white;
-}
-
-.btn-group button:nth-child(2):hover {
-    background: #666;
-}
-
-/* Back to List */
-.btn-group button:nth-child(3) {
-    background: #e0e0e0;
-    color: #333;
-}
-
-.btn-group button:nth-child(3):hover {
-    background: #cfcfcf;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-
-    .content {
-        padding: 30px 20px;
+/* ================= RESPONSIVE ================= */
+@media(min-width:600px){
+    .grid-2{
+        grid-template-columns:1fr 1fr;
     }
+}
 
-    .main-content {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+@media(min-width:992px){
+    .card{
+        padding:30px;
     }
+}
 
-    .btn-group {
-        flex-direction: column;
+@media(max-width:500px){
+    .container{
+        margin:20px auto;
+    }
+    input, select, textarea{
+        font-size:13px;
     }
 }
 
 </style>
+
 {% endblock head %}
 
 {% block body %}
 
 <div class="container">
-    <div class="content">
 
-        <div class="main-content">
-            <h1>Add Expense</h1>
-            <a href="{% url 'expense_home' %}" class="back-btn">Back</a>
-        </div>
+    <div class="card">
 
-        <label>Claim Type</label>
-        <select>
-            <option>Claimable</option>
-        </select>
+        <h2>💼 Add Expense</h2>
+        {% if form.errors %}
+            <div style="color:red;">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <label>Travel Type <span class="required">*</span></label>
-        <select>
-            <option>Office</option>
-        </select>
+            <!-- ROW 1 -->
+            <div class="grid-2">
+                <div>
+                    <label>Claim Type</label>
+                    {{ form.claim_type }}
+                </div>
 
-        <label>City <span class="required">*</span></label>
-        <select>
-            <option>Mumbai</option>
-        </select>
+                <div>
+                    <label>Travel Type</label>
+                    {{ form.travel_type }}
+                </div>
+            </div>
 
-        <label>Date <span class="required">*</span></label>
-        <input type="date" value="2025-07-20" />
+            <!-- ROW 2 -->
+            <div class="grid-2">
+                <div>
+                    <label>City</label>
+                    {{ form.city }}
+                </div>
 
-        <label>Expense <span class="required">*</span></label>
-        <select>
-            <option>Select Expense</option>
-        </select>
+                <div>
+                    <label>Date</label>
+                    {{ form.date }}
+                </div>
+            </div>
 
-        <div class="exp-limit-btn">Exp. Limit</div>
+            <!-- EXPENSE -->
+            <div class="grid">
+                <div>
+                    <label>Expense</label>
+                    {{ form.expense }}
+                </div>
+            </div>
 
-        <label>Currency Type</label>
-        <select>
-            <option>INR</option>
-        </select>
+            <!-- CURRENCY -->
+            <div class="grid-2">
+                <div>
+                    <label>Currency</label>
+                    {{ form.currency }}
+                </div>
 
-        <label>Conversion Rate <span class="required">*</span></label>
-        <input type="text" value="1.00" readonly />
+                <div>
+                    <label>Conversion Rate</label>
+                    {{ form.conversion_rate }}
+                </div>
+            </div>
 
-        <label>Rate: Unit</label>
-        <input type="text" placeholder="Unit Value" />
+            <!-- AMOUNT -->
+            <div class="grid-2">
+                <!-- <div>
+                    <label>Unit Value</label>
+                    {{ form.unit_value }}
+                </div> -->
 
-        <label>Amount <span class="required">*</span></label>
-        <input type="number" placeholder="Amount" />
+                <div>
+                    <label>Amount</label>
+                    {{ form.amount }}
+                </div>
 
-        <label>Final Amount <span class="required">*</span></label>
-        <input type="number" placeholder="Final Amount" />
+                <div>
+                    <label>Final Amount</label>
+                    {{ form.final_amount }}
+                </div>
+            </div>
 
-        <label>Project <span class="required">*</span></label>
-        <select>
-            <option>Select Project</option>
-        </select>
+            <!-- FINAL -->
+            <!-- <div class="grid">
+                <div>
+                    <label>Final Amount</label>
+                    {{ form.final_amount }}
+                </div>
+            </div> -->
 
-        <label>Attach Document</label>
-        <input type="file" />
+            <!-- PROJECT -->
+            <div class="grid">
+                <div>
+                    <label>Project</label>
+                    {{ form.project }}
+                </div>
+            </div>
 
-        <label>Payment Bill</label>
-        <input type="file" />
+            <!-- FILES -->
+            <div class="grid-2">
+                <div>
+                    <label>Attach Document</label>
+                    {{ form.document }}
+                </div>
 
-        <label>Remarks <span class="required">*</span></label>
-        <textarea rows="3" placeholder="Remarks"></textarea>
+                <div>
+                    <label>Payment Bill</label>
+                    {{ form.bill }}
+                </div>
+            </div>
 
-        <div class="btn-group">
-            <button type="submit">Save</button>
-            <button type="reset">Cancel</button>
-            <button type="button">Back to List</button>
-        </div>
+            <!-- REMARKS -->
+            <div class="grid">
+                <div>
+                    <label>Remarks</label>
+                    {{ form.remarks }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Submit Expense</button>
+
+        </form>
 
     </div>
+
 </div>
 
 {% endblock body %}

@@ -1,0 +1,250 @@
+{% extends "manager/root.html" %}
+
+{% block body %}
+
+<style>
+
+/* ===== EXISTING CSS SAME ===== */
+h2 {
+    color: #ffdd57;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: nowrap;
+}
+
+.card-header h3 {
+    color: #00c6ff;
+    margin: 0;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.back-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+.summary {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.box {
+    min-width: 160px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    text-align: center;
+}
+
+.card {
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.08);
+}
+
+.desktop-table {
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+th {
+    background: rgba(0,0,0,0.4);
+}
+
+/* ===== STATUS ===== */
+.approved { color: #00ff9d; font-weight: bold; }
+.rejected { color: #ff4d4d; font-weight: bold; }
+.pending { color: orange; font-weight: bold; }
+
+/* ===== ACTION BUTTONS ===== */
+.action-box {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+button {
+    border: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-approve { background: #00c853; color: white; }
+.btn-reject { background: #ff4d4d; color: white; }
+.btn-pending { background: orange; color: white; }
+
+/* ===== MOBILE ===== */
+.mobile-cards { display: none; }
+
+.swipe-card {
+    background: rgba(255,255,255,0.10);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+
+    .desktop-table { display: none; }
+    .mobile-cards { display: block; }
+
+    .summary {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box { width: 90%; }
+
+    .back-btn {
+        font-size: 11px;
+        padding: 5px 12px;
+    }
+}
+
+</style>
+
+<div class="container">
+
+    <h2>👤 {{ employee.username }} - Swipe Details</h2>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+        <div class="box">✔ Approved: {{ approved_swipe }}</div>
+        <div class="box">❌ Rejected: {{ rejected_swipe }}</div>
+        <div class="box">⏳ Pending: {{ pending_swipe }}</div>
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3>📥 Swipe Requests</h3>
+            <a href="{% url 'employee_list' %}" class="back-btn">Back</a>
+        </div>
+
+        <!-- ================= DESKTOP TABLE ================= -->
+        <div class="desktop-table">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Action</th> <!-- ✅ NEW -->
+                </tr>
+
+                {% for s in swipes %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.category }}</td>
+                    <td>{{ s.request_date }}</td>
+                    <td>{{ s.in_time|default:"--" }}</td>
+                    <td>{{ s.out_time|default:"--" }}</td>
+                    <td>{{ s.reason }}</td>
+
+                    <td class="{{ s.status|lower }}">{{ s.status }}</td>
+
+                    <!-- ACTION -->
+                    <td>
+                        <div class="action-box">
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                                <button name="action" value="approve" class="btn-approve">✔</button>
+                            </form>
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                                <button name="action" value="reject" class="btn-reject">✖</button>
+                            </form>
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                                <button name="action" value="pending" class="btn-pending">⏳</button>
+                            </form>
+
+                        </div>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- ================= MOBILE CARDS ================= -->
+        <div class="mobile-cards">
+
+            {% for s in swipes %}
+            <div class="swipe-card">
+                <div><b>ID:</b> {{ s.id }}</div>
+                <div><b>Category:</b> {{ s.category }}</div>
+                <div><b>Date:</b> {{ s.request_date }}</div>
+                <div><b>In Time:</b> {{ s.in_time|default:"--" }}</div>
+                <div><b>Out Time:</b> {{ s.out_time|default:"--" }}</div>
+                <div><b>Reason:</b> {{ s.reason }}</div>
+
+                <div class="{{ s.status|lower }}">
+                    <b>Status:</b> {{ s.status }}
+                </div>
+
+                <div class="action-box">
+                    <form method="POST">{% csrf_token %}
+                        <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                        <button name="action" value="approve" class="btn-approve">✔</button>
+                    </form>
+
+                    <form method="POST">{% csrf_token %}
+                        <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                        <button name="action" value="reject" class="btn-reject">✖</button>
+                    </form>
+
+                    <form method="POST">{% csrf_token %}
+                        <input type="hidden" name="swipe_id" value="{{ s.id }}">
+                        <button name="action" value="pending" class="btn-pending">⏳</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

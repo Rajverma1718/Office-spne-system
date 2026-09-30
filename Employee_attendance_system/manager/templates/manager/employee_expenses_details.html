@@ -1,0 +1,330 @@
+{% extends "manager/root.html" %}
+
+{% block body %}
+
+<style>
+
+/* ================= TITLE ================= */
+h2{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:25px;
+    font-weight:700;
+    letter-spacing:0.5px;
+}
+
+/* ================= FILTER ================= */
+.filter-box{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+    padding:15px;
+    background: rgba(255,255,255,0.07);
+    border-radius:12px;
+    backdrop-filter: blur(8px);
+}
+
+.filter-item{
+    display:flex;
+    flex-direction:column;
+}
+
+.filter-item label{
+    font-size:12px;
+    margin-bottom:5px;
+    opacity:0.8;
+}
+
+.filter-box input{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+    min-width:170px;
+    color:black;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+/* ================= BUTTONS ================= */
+.filter-buttons{
+    display:flex;
+    gap:10px;
+    align-items:end;
+}
+
+.filter-box button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:#fff;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+/* FILTER BUTTON */
+.btn-filter{
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+}
+
+.btn-filter:hover{
+    transform:scale(1.05);
+}
+
+/* RESET BUTTON */
+.btn-reset{
+    background: linear-gradient(135deg,#ff512f,#dd2476);
+}
+
+.btn-reset:hover{
+    transform:scale(1.05);
+}
+
+/* ================= SUMMARY ================= */
+.summary{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.box{
+    padding:18px;
+    border-radius:14px;
+    background: rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.1);
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.box:hover{
+    transform:translateY(-5px);
+}
+
+/* ================= GRID ================= */
+.cards-wrapper{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:20px;
+}
+
+/* ================= CARD ================= */
+.card{
+    padding:20px;
+    border-radius:16px;
+    background: rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.5);
+}
+
+/* ================= MONTH ================= */
+.month-header{
+    font-size:18px;
+    font-weight:700;
+    color:#00c6ff;
+    margin-bottom:10px;
+}
+
+/* ================= EXPENSE ================= */
+.exp-block{
+    background: rgba(0,0,0,0.25);
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+/* ================= STATUS ================= */
+.status-approved{ color:#00ff9d; font-weight:bold; }
+.status-rejected{ color:#ff4d4d; font-weight:bold; }
+.status-pending{ color:#ffd200; font-weight:bold; }
+
+/* ================= ACTION BUTTONS ================= */
+.action-box{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+}
+
+button{
+    border:none;
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:12px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+.btn-approve{ background:#00c853; color:#fff; }
+.btn-reject{ background:#ff4d4d; color:#fff; }
+.btn-pending{ background:#ff9800; color:#fff; }
+
+/* ================= EMPTY ================= */
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#aaa;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:1024px){
+    .cards-wrapper{
+        grid-template-columns: repeat(2,1fr);
+        width: 100%;
+    }
+
+    .summary{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:768px){
+
+    .cards-wrapper{
+        grid-template-columns:1fr;
+
+    }
+
+    .filter-box{
+        flex-direction:column;
+        align-items:stretch;
+        width: 100%;
+    }
+
+    .filter-box input{
+        width:100%;
+       
+    }
+
+    .filter-buttons{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .filter-box button{
+        width:100%;
+    }
+}
+
+</style>
+
+<div class="container">
+
+<h2>💰 {{ employee.username }} - Expense Details</h2>
+
+<!-- ================= FILTER ================= -->
+<form method="GET" class="filter-box">
+
+    <div class="filter-item">
+        <label>Start Date</label>
+        <input type="date" name="start_date">
+    </div>
+
+    <div class="filter-item">
+        <label>End Date</label>
+        <input type="date" name="end_date">
+    </div>
+
+    <div class="filter-item">
+        <label>Month</label>
+        <input type="month" name="month">
+    </div>
+
+    <!-- ================= BUTTONS ================= -->
+    <div class="filter-buttons">
+
+        <button type="submit" class="btn-filter">Filter</button>
+
+        <!-- RESET BUTTON -->
+        <button type="button" class="btn-reset"
+            onclick="window.location.href=window.location.pathname;">
+            Reset
+        </button>
+
+    </div>
+
+</form>
+
+<!-- ================= SUMMARY ================= -->
+<div class="summary">
+    <div class="box">✔ Approved: {{ approved_expense }}</div>
+    <div class="box">❌ Rejected: {{ rejected_expense }}</div>
+    <div class="box">⏳ Pending: {{ pending_expense }}</div>
+</div>
+
+<!-- ================= CARDS ================= -->
+<div class="cards-wrapper">
+
+{% for item in data %}
+<div class="card">
+
+    <div class="month-header">
+        📅 {{ item.month|date:"F Y" }}
+    </div>
+
+    <p><strong>Total:</strong> ₹ {{ item.total }}</p>
+    <p><strong>{{ item.expenses|length }} Expenses</strong></p>
+
+    <hr style="opacity:0.2;">
+
+    {% for exp in item.expenses %}
+    <div class="exp-block">
+
+        <p><strong>ID:</strong> {{ exp.id }}</p>
+        <p><strong>Date:</strong> {{ exp.date }}</p>
+        <p><strong>Amount:</strong> ₹ {{ exp.amount }}</p>
+
+        <p>
+            {% if exp.status == "approved" %}
+                <span class="status-approved">Approved</span>
+            {% elif exp.status == "rejected" %}
+                <span class="status-rejected">Rejected</span>
+            {% else %}
+                <span class="status-pending">Pending</span>
+            {% endif %}
+        </p>
+
+        <div class="action-box">
+            <form method="POST">{% csrf_token %}
+                <input type="hidden" name="expense_id" value="{{ exp.id }}">
+                <button name="action" value="approve" class="btn-approve">✔</button>
+            </form>
+
+            <form method="POST">{% csrf_token %}
+                <input type="hidden" name="expense_id" value="{{ exp.id }}">
+                <button name="action" value="reject" class="btn-reject">✖</button>
+            </form>
+
+            <form method="POST">{% csrf_token %}
+                <input type="hidden" name="expense_id" value="{{ exp.id }}">
+                <button name="action" value="pending" class="btn-pending">⏳</button>
+            </form>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% empty %}
+<div class="empty">No Expense Data Found</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

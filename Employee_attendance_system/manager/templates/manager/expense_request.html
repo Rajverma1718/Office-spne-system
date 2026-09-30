@@ -1,0 +1,83 @@
+{% extends "manager/root.html" %}
+
+{% block body %}
+
+<style>
+/* SAME UI — NO CHANGE */
+.container h2 {
+    font-size: 28px;
+    color: #ffdd57;
+    text-align: center;
+}
+
+.request-card {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 25px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    color: #fff;
+    width: 95%;
+    transition: 0.3s;
+}
+
+.request-card:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+
+.request-card p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.request-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 15px;
+}
+
+.request-actions a {
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 25px;
+}
+
+.approve {
+    background: #27ae60;
+    color: white;
+}
+
+.reject {
+    background: #c0392b;
+    color: white;
+}
+</style>
+
+<div class="container">
+
+    <h2>💰 Expense Requests (Month Wise)</h2>
+
+    {% if months %}
+        {% for m in months %}
+        <div class="request-card">
+
+            <p><strong>Month:</strong> {{ m.month|date:"F Y" }}</p>
+            <p><strong>Total Requests:</strong> {{ m.total }}</p>
+
+            <div class="request-actions">
+                <a href="{% url 'month_expenses' m.month|date:'Y-m' %}" class="approve">
+                    View Data
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center; color:#fff;">No pending expenses</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
