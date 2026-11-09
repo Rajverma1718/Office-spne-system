@@ -32,7 +32,7 @@ def add_expense(request):
             #  SAFE CALCULATION (None handle)
             amount = expense.amount or 0
             rate = expense.conversion_rate or 1
-            expense.final_amount = expense.amount
+            expense.final_amount = amount * rate
 
             expense.save()
 
